@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ARPM Mining - লগইন এবং হোম</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            height: 100vh;
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+        .login-container, .home-container, .profile-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        .login-container h2, .home-container h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            padding: 8px;
+            width: 100%;
+        }
+        .form-control::placeholder {
+            color: #d1d5db;
+        }
+        .btn-login, .btn-danger {
+            background: linear-gradient(45deg, #2563eb, #60a5fa);
+            border: none;
+            transition: transform 0.2s, box-shadow 0.3s;
+            width: 100%;
+            font-size: 0.9rem;
+            padding: 10px;
+        }
+        .btn-danger {
+            background: linear-gradient(45deg, #ef4444, #f87171);
+        }
+        .btn-login:hover, .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .home-container {
+            display: none;
+            padding-bottom: 60px;
+        }
+        .mining-circle {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #2563eb, #60a5fa);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 15px auto;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .mining-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .mining-circle.disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+        }
+        .timer {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 15px auto;
+        }
+        .balance-info {
+            margin: 15px 0;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .ad-container, .bottom-ad-container, .profile-ad-container {
+            margin: 15px 0;
+            text-align: center;
+            width: 100%;
+        }
+        .ad-container iframe, .ad-container div, .bottom-ad-container iframe, .bottom-ad-container div, .profile-ad-container iframe, .profile-ad-container div {
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+        .navbar-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 58, 138, 0.9);
+            border-top: 1px solid #2b6cb0;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .navbar-bottom a {
+            text-align: center;
+            color: #fff;
+            text-decoration: none;
+            font-size: 10px;
+            transition: color 0.3s;
+            flex: 1;
+        }
+        .navbar-bottom a i {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        .navbar-bottom a:hover {
+            color: #60a5fa;
+        }
+        .navbar-bottom a.active {
+            color: #60a5fa;
+        }
+        .link {
+            color: #60a5fa;
+            text-decoration: none;
+            margin: 0 5px;
+            font-size: 0.85rem;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 576px) {
+            .login-container, .home-container, .profile-container {
+                margin: 10px;
+                padding: 10px;
+            }
+            .login-container h2, .home-container h2 {
+                font-size: 1.5rem;
+            }
+            .mining-circle, .timer {
+                width: 100px;
+                height: 100px;
+                font-size: 0.9rem;
+            }
+            .balance-info {
+                font-size: 0.9rem;
+                padding: 6px;
+            }
+            .form-control {
+                font-size: 0.85rem;
+                padding: 6px;
+            }
+            .btn-login, .btn-danger {
+                font-size: 0.85rem;
+                padding: 8px;
+            }
+            .navbar-bottom a {
+                font-size: 9px;
+            }
+            .navbar-bottom a i {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- লগইন পেজ -->
+    <div id="login-container" class="login-container">
+        <h2>লগইন</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-login">Sign in</button>
+            <p class="mt-3">
+                Have no account yet? <a href="#" id="register-link" class="link">Register</a><br>
+                Forgot password? <a href="#" id="reset-password-link" class="link">Reset password</a>
+            </p>
+        </form>
+    </div>
+
+    <!-- হোম পেজ -->
+    <div id="home-container" class="home-container">
+        <h2>Welcome to ARPM Mining</h2>
+        <div class="balance-info">
+            <p><strong>বর্তমান ব্যালেন্স:</strong> <span id="balance">0.0000</span> ARPM</p>
+        </div>
+        <div id="mining-area">
+            <div class="mining-circle" id="mining-circle" onclick="startMining()">Start Mining</div>
+        </div>
+        <div id="ad-container" class="ad-container hidden"></div>
+        <div id="bottom-ad-container" class="bottom-ad-container"></div>
+    </div>
+
+    <!-- প্রোফাইল পেজ -->
+    <div id="profile-container" class="profile-container hidden">
+        <h2>প্রোফাইল</h2>
+        <div class="balance-info">
+            <p><strong>ইউজার নাম:</strong> <span id="profile-username"></span></p>
+            <p><strong>ইমেইল:</strong> <span id="profile-email"></span></p>
+            <p><strong>ইনভাইট কোড:</strong> <span id="profile-invite-code"></span></p>
+        </div>
+        <button class="btn btn-danger w-100 mt-3" onclick="signOutUser()">
+            <i class="fas fa-sign-out-alt me-2"></i>লগআউট
+        </button>
+        <div id="profile-ad-container" class="profile-ad-container"></div>
+    </div>
+
+    <div class="navbar-bottom">
+        <a href="#" onclick="navigateTo('home')" class="active">
+            <i class="fas fa-home"></i>হোম
+        </a>
+        <a href="#" onclick="navigateTo('invite')">
+            <i class="fas fa-user-plus"></i>ইনভাইট
+        </a>
+        <a href="#" onclick="navigateTo('wallet')">
+            <i class="fas fa-wallet"></i>ওয়ালেট
+        </a>
+        <a href="#" onclick="navigateTo('income')">
+            <i class="fas fa-money-bill-wave"></i>আয়
+        </a>
+        <a href="#" onclick="navigateTo('profile')">
+            <i class="fas fa-user"></i>প্রোফাইল
+        </a>
+    </div>
+
+    <script type="module">
+        // Firebase SDK ইম্পোর্ট
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+        // Firebase কনফিগারেশন
+        const firebaseConfig = {
+            apiKey: "AIzaSyB7YhDmQa4MtSzutSwJGGU2F7XR9ubcoqQ",
+            authDomain: "arpm-mining.firebaseapp.com",
+            databaseURL: "https://arpm-mining-default-rtdb.firebaseio.com",
+            projectId: "arpm-mining",
+            storageBucket: "arpm-mining.firebasestorage.app",
+            messagingSenderId: "854582920631",
+            appId: "1:854582920631:web:8ce5d5141c70d068a3d432",
+            measurementId: "G-8YVW5EK6N1"
+        };
+
+        // Firebase ইনিশিয়ালাইজ
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        auth.languageCode = 'bn';
+
+        // ডম এলিমেন্ট
+        const loginContainer = document.getElementById('login-container');
+        const homeContainer = document.getElementById('home-container');
+        const profileContainer = document.getElementById('profile-container');
+        const loginForm = document.getElementById('login-form');
+        const balanceElement = document.getElementById('balance');
+        const registerLink = document.getElementById('register-link');
+        const resetPasswordLink = document.getElementById('reset-password-link');
+        const miningCircle = document.getElementById('mining-circle');
+        const miningArea = document.getElementById('mining-area');
+        const timerElement = document.getElementById('timer');
+
+        // অ্যাড কনফিগারেশন
+        const adConfigs = [
+            { key: '9970296ce7f10d2bc088e12491052390', format: 'iframe', height: 250, width: 300, src: '//www.highperformanceformat.com/9970296ce7f10d2bc088e12491052390/invoke.js' },
+            { key: '9bfeb6f22a14d69efdf3e562dfdce0a7', format: 'iframe', height: 90, width: 728, src: '//www.highperformanceformat.com/9bfeb6f22a14d69efdf3e562dfdce0a7/invoke.js' },
+            { key: '7c7e345dbc72be55627fdf0ca84cdfe7', format: 'iframe', height: 600, width: 160, src: '//www.highperformanceformat.com/7c7e345dbc72be55627fdf0ca84cdfe7/invoke.js' },
+            { key: '2345a52613caecb4ac1fb2b6251d8d50', format: 'iframe', height: 300, width: 160, src: '//www.highperformanceformat.com/2345a52613caecb4ac1fb2b6251d8d50/invoke.js' },
+            { key: '5a66defd82bc227e9f6adbbabde3a707', format: 'iframe', height: 50, width: 320, src: '//www.highperformanceformat.com/5a66defd82bc227e9f6adbbabde3a707/invoke.js' },
+            { key: 'f8e69eb7049e83d849bfa3e2a96d5df0', format: 'div', containerId: 'container-f8e69eb7049e83d849bfa3e2a96d5df0', src: '//pl26589695.profitableratecpm.com/f8e69eb7049e83d849bfa3e2a96d5df0/invoke.js' }
+        ];
+
+        // র‍্যান্ডম অ্যাড লোড
+        async function loadRandomAd(containerId) {
+            const adContainer = document.getElementById(containerId);
+            if (!adContainer) return false;
+            adContainer.innerHTML = '';
+            adContainer.classList.remove('hidden');
+            const randomAd = adConfigs[Math.floor(Math.random() * adConfigs.length)];
+            if (randomAd.format === 'iframe') {
+                const iframe = document.createElement('iframe');
+                iframe.width = randomAd.width;
+                iframe.height = randomAd.height;
+                iframe.frameBorder = '0';
+                iframe.scrolling = 'no';
+                adContainer.appendChild(iframe);
+                window.atOptions = { key: randomAd.key, format: 'iframe', height: randomAd.height, width: randomAd.width, params: {} };
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = randomAd.src;
+                script.async = true;
+                adContainer.appendChild(script);
+            } else if (randomAd.format === 'div') {
+                const div = document.createElement('div');
+                div.id = randomAd.containerId;
+                adContainer.appendChild(div);
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = randomAd.src;
+                script.async = true;
+                script.setAttribute('data-cfasync', 'false');
+                adContainer.appendChild(script);
+            }
+            return true;
+        }
+
+        // লগইন ফর্ম সাবমিশন
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                console.log('লগইন সফল');
+                loginContainer.style.display = 'none';
+                homeContainer.style.display = 'block';
+                updateBalance();
+                loadMiningState();
+            } catch (error) {
+                console.error('লগইন ত্রুটি:', error.message);
+                alert('লগইন ব্যর্থ: ' + error.message);
+            }
+        });
+
+        // রেজিস্ট্রেশন
+        registerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const username = prompt('ইউজার নাম দিন:');
+            const email = prompt('নতুন ইমেইল দিন:');
+            const password = prompt('নতুন পাসওয়ার্ড দিন:');
+            const confirmPassword = prompt('পাসওয়ার্ড নিশ্চিত করুন:');
+            const inviteCode = prompt('ইনভাইট কোড দিন:');
+            const agree = confirm('শর্তাবলীতে সম্মত কি?');
+
+            if (!username || !email || !password || !confirmPassword || !inviteCode) {
+                alert('সব তথ্য পূরণ করুন!');
+                return;
+            }
+            if (password !== confirmPassword) {
+                alert('পাসওয়ার্ড মেলেনি!');
+                return;
+            }
+            if (!agree) {
+                alert('শর্তাবলীতে সম্মত হতে হবে!');
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    set(ref(db, 'users/' + user.uid), {
+                        username: username,
+                        email: email,
+                        tokens: 0,
+                        inviteCode: inviteCode,
+                        miningStartTime: 0,
+                        miningEndTime: 0
+                    });
+                    console.log('রেজিস্ট্রেশন সফল:', user.uid);
+                    alert('রেজিস্ট্রেশন সফল!');
+                })
+                .catch((error) => {
+                    console.error('রেজিস্ট্রেশন ত্রুটি:', error.message);
+                    alert('রেজিস্ট্রেশন ব্যর্থ: ' + error.message);
+                });
+        });
+
+        // পাসওয়ার্ড রিসেট
+        resetPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = prompt('আপনার ইমেইল দিন:');
+            if (email) {
+                sendPasswordResetEmail(auth, email)
+                    .then(() => {
+                        console.log('পাসওয়ার্ড রিসেট ইমেইল পাঠানো হয়েছে');
+                        alert('পাসওয়ার্ড রিসেট লিঙ্ক আপনার ইমেইলে পাঠানো হয়েছে!');
+                    })
+                    .catch((error) => {
+                        console.error('পাসওয়ার্ড রিসেট ত্রুটি:', error.message);
+                        alert('পাসওয়ার্ড রিসেট ব্যর্থ: ' + error.message);
+                    });
+            }
+        });
+
+        // অথেনটিকেশন স্টেট চেক
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('ইউজার লগইন করা আছে:', user.uid);
+                loginContainer.style.display = 'none';
+                homeContainer.style.display = 'block';
+                profileContainer.style.display = 'none';
+                updateBalance();
+                loadMiningState();
+                loadProfileInfo();
+                loadRandomAd('bottom-ad-container');
+                loadProfileAds();
+            } else {
+                console.log('ইউজার লগইন করা নেই');
+                loginContainer.style.display = 'block';
+                homeContainer.style.display = 'none';
+                profileContainer.style.display = 'none';
+            }
+        });
+
+        // ব্যালেন্স আপডেট
+        async function updateBalance() {
+            if (auth.currentUser) {
+                const userId = auth.currentUser.uid;
+                const userRef = ref(db, 'users/' + userId);
+                const snapshot = await get(userRef);
+                const userData = snapshot.val() || {};
+                balanceElement.textContent = (userData.tokens || 0).toFixed(4);
+            }
+        }
+
+        // মাইনিং শুরু
+        window.startMining = async function() {
+            if (!auth.currentUser) return;
+            const userId = auth.currentUser.uid;
+            const userRef = ref(db, 'users/' + userId);
+            const snapshot = await get(userRef);
+            const userData = snapshot.val() || {};
+            const currentTime = Date.now();
+            const miningEndTime = userData.miningEndTime || 0;
+
+            if (currentTime < miningEndTime) {
+                miningCircle.classList.add('disabled');
+                return;
+            }
+
+            const adLoaded = await loadRandomAd('ad-container');
+            if (adLoaded) {
+                setTimeout(async () => {
+                    const miningDuration = 6 * 60 * 60 * 1000; // ৬ ঘণ্টা
+                    const startTime = Date.now();
+                    const endTime = startTime + miningDuration;
+                    await update(userRef, {
+                        miningStartTime: startTime,
+                        miningEndTime: endTime,
+                        tokens: userData.tokens || 0
+                    });
+                    miningCircle.style.display = 'none';
+                    const timerDiv = document.createElement('div');
+                    timerDiv.className = 'timer';
+                    timerDiv.id = 'timer';
+                    miningArea.innerHTML = '';
+                    miningArea.appendChild(timerDiv);
+                    startTimer(endTime);
+                    miningCircle.classList.add('disabled');
+                }, 1000);
+            }
+        };
+
+        // টাইমার এবং টোকেন বৃদ্ধি
+        function startTimer(endTime) {
+            const totalDuration = 6 * 60 * 60 * 1000; // ৬ ঘণ্টা মিলিসেকেন্ডে
+            const totalSeconds = totalDuration / 1000; // মোট সেকেন্ড
+            const totalTokens = 2; // ৬ ঘণ্টায় ২ টোকেন
+            const tokenPerSecond = totalTokens / totalSeconds; // প্রতি সেকেন্ডে টোকেন বৃদ্ধি
+
+            const timerDiv = document.getElementById('timer');
+            const interval = setInterval(async () => {
+                const now = Date.now();
+                const timeLeft = endTime - now;
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    timerDiv.textContent = '06:00:00';
+                    miningCircle.style.display = 'block';
+                    miningCircle.classList.remove('disabled');
+                    const userId = auth.currentUser.uid;
+                    const userRef = ref(db, 'users/' + userId);
+                    const snapshot = await get(userRef);
+                    const userData = snapshot.val() || {};
+                    await update(userRef, { tokens: (userData.tokens || 0) + totalTokens });
+                    updateBalance();
+                    return;
+                }
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                timerDiv.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                // প্রতি সেকেন্ডে টোকেন বৃদ্ধি
+                const userId = auth.currentUser.uid;
+                const userRef = ref(db, 'users/' + userId);
+                const snapshot = await get(userRef);
+                const userData = snapshot.val() || {};
+                const elapsedTime = totalDuration - timeLeft;
+                const tokensEarned = (elapsedTime / 1000) * tokenPerSecond;
+                await update(userRef, { tokens: (userData.tokens || 0) + tokenPerSecond });
+                updateBalance();
+            }, 1000);
+        }
+
+        // মাইনিং স্টেট লোড
+        async function loadMiningState() {
+            if (!auth.currentUser) return;
+            const userId = auth.currentUser.uid;
+            const userRef = ref(db, 'users/' + userId);
+            const snapshot = await get(userRef);
+            const userData = snapshot.val() || {};
+            const currentTime = Date.now();
+            const miningEndTime = userData.miningEndTime || 0;
+
+            if (currentTime < miningEndTime) {
+                miningCircle.style.display = 'none';
+                const timerDiv = document.createElement('div');
+                timerDiv.className = 'timer';
+                timerDiv.id = 'timer';
+                miningArea.innerHTML = '';
+                miningArea.appendChild(timerDiv);
+                startTimer(miningEndTime);
+                miningCircle.classList.add('disabled');
+            } else {
+                miningCircle.style.display = 'block';
+                miningCircle.classList.remove('disabled');
+            }
+        }
+
+        // প্রোফাইল তথ্য লোড
+        async function loadProfileInfo() {
+            if (!auth.currentUser) return;
+            const userId = auth.currentUser.uid;
+            const userRef = ref(db, 'users/' + userId);
+            const snapshot = await get(userRef);
+            const userData = snapshot.val() || {};
+            document.getElementById('profile-username').textContent = userData.username || 'N/A';
+            document.getElementById('profile-email').textContent = userData.email || 'N/A';
+            document.getElementById('profile-invite-code').textContent = userData.inviteCode || 'N/A';
+        }
+
+        // প্রোফাইল অ্যাড লোড
+        async function loadProfileAds() {
+            const profileAdContainer = document.getElementById('profile-ad-container');
+            if (!profileAdContainer) return;
+
+            async function showNextAd() {
+                const adLoaded = await loadRandomAd('profile-ad-container');
+                if (adLoaded) {
+                    setTimeout(() => {
+                        profileAdContainer.innerHTML = ''; // পূর্বের অ্যাড সরানো
+                        showNextAd(); // পরের অ্যাড দেখানো
+                    }, 10000); // ১০ সেকেন্ড পরে পরবর্তী অ্যাড
+                }
+            }
+            showNextAd();
+        }
+
+        // নেভিগেশন হ্যান্ডলার
+        window.navigateTo = function(section) {
+            console.log('নেভিগেশন ক্লিক:', section);
+            const navLinks = document.querySelectorAll('.navbar-bottom a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            document.querySelector(`.navbar-bottom a[onclick="navigateTo('${section}')"]`).classList.add('active');
+
+            loginContainer.style.display = 'none';
+            homeContainer.style.display = 'none';
+            profileContainer.style.display = 'none';
+
+            switch (section) {
+                case 'home':
+                    homeContainer.style.display = 'block';
+                    loadRandomAd('bottom-ad-container');
+                    break;
+                case 'wallet':
+                case 'income':
+                    loadRandomAd('ad-container').then(() => {
+                        setTimeout(() => {
+                            alert('Coming soon');
+                        }, 1000);
+                    });
+                    homeContainer.style.display = 'block';
+                    break;
+                case 'invite':
+                    if (auth.currentUser) {
+                        const userId = auth.currentUser.uid;
+                        const userRef = ref(db, 'users/' + userId);
+                        get(userRef).then((snapshot) => {
+                            const userData = snapshot.val() || {};
+                            const inviteCode = userData.inviteCode || generateInviteCode();
+                            alert(`আপনার ইনভাইট কোড: ${inviteCode}`);
+                        });
+                    }
+                    homeContainer.style.display = 'block';
+                    break;
+                case 'profile':
+                    profileContainer.style.display = 'block';
+                    break;
+                default:
+                    console.error('অজানা নেভিগেশন:', section);
+                    alert('অজানা অপশন!');
+            }
+        };
+
+        // ইনভাইট কোড জেনারেট
+        function generateInviteCode() {
+            return 'INVITE-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+        }
+
+        // লগআউট
+        window.signOutUser = async function() {
+            try {
+                await signOut(auth);
+                console.log('লগআউট সফল');
+                loginContainer.style.display = 'block';
+                homeContainer.style.display = 'none';
+                profileContainer.style.display = 'none';
+            } catch (error) {
+                console.error('লগআউট ত্রুটি:', error.message);
+                alert('লগআউট ব্যর্থ: ' + error.message);
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
