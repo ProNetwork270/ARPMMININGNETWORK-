@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ARPM Mining - লগইন এবং হোম</title>
+    <title>ARPM Mining - Login and Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -20,7 +20,7 @@
             overflow-x: hidden;
             font-size: 16px;
         }
-        .login-container, .home-container, .profile-container {
+        .login-container, .signup-container, .reset-container, .home-container, .profile-container, .income-container, .invite-container {
             width: 100%;
             max-width: 400px;
             margin: 20px auto;
@@ -31,7 +31,7 @@
             backdrop-filter: blur(10px);
             text-align: center;
         }
-        .login-container h2, .home-container h2 {
+        .login-container h2, .signup-container h2, .reset-container h2, .home-container h2, .income-container h2, .invite-container h2, .profile-container h2 {
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 15px;
@@ -52,7 +52,7 @@
         .form-control::placeholder {
             color: #d1d5db;
         }
-        .btn-login, .btn-danger {
+        .btn-login, .btn-danger, .btn-success {
             background: linear-gradient(45deg, #2563eb, #60a5fa);
             border: none;
             transition: transform 0.2s, box-shadow 0.3s;
@@ -63,11 +63,14 @@
         .btn-danger {
             background: linear-gradient(45deg, #ef4444, #f87171);
         }
-        .btn-login:hover, .btn-danger:hover {
+        .btn-success {
+            background: linear-gradient(45deg, #22c55e, #86efac);
+        }
+        .btn-login:hover, .btn-danger:hover, .btn-success:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
-        .home-container {
+        .home-container, .income-container, .invite-container, .profile-container {
             display: none;
             padding-bottom: 60px;
         }
@@ -112,6 +115,26 @@
             padding: 8px;
             border-radius: 8px;
         }
+        .profile-info {
+            margin: 15px 0;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        .profile-info:hover {
+            transform: scale(1.02);
+        }
+        .profile-info p {
+            margin: 5px 0;
+            font-weight: 300;
+        }
+        .profile-info p strong {
+            font-weight: 600;
+            color: #60a5fa;
+        }
         .ad-container, .bottom-ad-container, .profile-ad-container {
             margin: 15px 0;
             text-align: center;
@@ -122,6 +145,21 @@
             max-width: 100%;
             height: auto;
         }
+        .custom-ad {
+            display: block;
+            margin: 50px auto 0; /* 50px margin-top to keep it 1 inch above heading */
+            max-width: 728px;
+            width: 100%;
+        }
+        .custom-ad img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+        .custom-ad img:hover {
+            transform: scale(1.02);
+        }
         .navbar-bottom {
             position: fixed;
             bottom: 0;
@@ -129,7 +167,7 @@
             right: 0;
             background: rgba(30, 58, 138, 0.9);
             border-top: 1px solid #2b6cb0;
-            display: flex;
+            display: none;
             justify-content: space-around;
             padding: 8px 0;
             z-index: 1000;
@@ -166,16 +204,60 @@
         .hidden {
             display: none;
         }
+        a.social-link {
+            color: #fff !important;
+            text-decoration: none;
+        }
+        a.social-link:hover {
+            text-decoration: underline;
+        }
+        .copy-btn {
+            background: linear-gradient(45deg, #2563eb, #60a5fa);
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        .copy-btn:hover {
+            background: linear-gradient(45deg, #1e40af, #3b82f6);
+        }
+        .logout-btn {
+            background: linear-gradient(45deg, #ef4444, #f87171);
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            width: 200px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .logout-btn i {
+            margin-right: 8px;
+        }
+        .logout-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(45deg, #dc2626, #ef4444);
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @media (max-width: 576px) {
-            .login-container, .home-container, .profile-container {
+            .login-container, .signup-container, .reset-container, .home-container, .profile-container, .income-container, .invite-container {
                 margin: 10px;
                 padding: 10px;
             }
-            .login-container h2, .home-container h2 {
+            .login-container h2, .signup-container h2, .reset-container h2, .home-container h2, .income-container h2, .invite-container h2, .profile-container h2 {
                 font-size: 1.5rem;
             }
             .mining-circle, .timer {
@@ -183,17 +265,20 @@
                 height: 100px;
                 font-size: 0.9rem;
             }
-            .balance-info {
-                font-size: 0.9rem;
+            .balance-info, .profile-info {
+                font-size: 0.85rem;
                 padding: 6px;
             }
             .form-control {
                 font-size: 0.85rem;
                 padding: 6px;
             }
-            .btn-login, .btn-danger {
+            .btn-login, .btn-danger, .btn-success, .copy-btn, .logout-btn {
                 font-size: 0.85rem;
                 padding: 8px;
+            }
+            .logout-btn {
+                width: 180px;
             }
             .navbar-bottom a {
                 font-size: 9px;
@@ -201,33 +286,82 @@
             .navbar-bottom a i {
                 font-size: 18px;
             }
+            .custom-ad img {
+                max-width: 100%;
+            }
+            .custom-ad {
+                margin: 30px auto 0; /* Adjusted for mobile to maintain spacing */
+            }
         }
     </style>
 </head>
 <body>
-    <!-- লগইন পেজ -->
+    <!-- Login Page -->
     <div id="login-container" class="login-container">
-        <h2>লগইন</h2>
+        <h2>Login</h2>
         <form id="login-form">
             <div class="form-group">
-                <input type="email" class="form-control" id="email" placeholder="Email" required>
+                <input type="email" class="form-control" id="login-email" placeholder="Email" required>
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                <input type="password" class="form-control" id="login-password" placeholder="Password" required>
             </div>
-            <button type="submit" class="btn btn-login">Sign in</button>
+            <button type="submit" class="btn btn-login">Login</button>
             <p class="mt-3">
-                Have no account yet? <a href="#" id="register-link" class="link">Register</a><br>
-                Forgot password? <a href="#" id="reset-password-link" class="link">Reset password</a>
+                Don't have an account? <a href="#" id="register-link" class="link" onclick="showSignup()">Register</a><br>
+                Forgot Password? <a href="#" id="reset-link" class="link" onclick="showReset()">Reset Password</a>
             </p>
         </form>
     </div>
 
-    <!-- হোম পেজ -->
-    <div id="home-container" class="home-container">
+    <!-- Registration Page -->
+    <div id="signup-container" class="signup-container hidden">
+        <h2>Register</h2>
+        <form id="signup-form">
+            <div class="form-group">
+                <input type="text" class="form-control" id="signup-username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-control" id="signup-email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="signup-password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="signup-confirm-password" placeholder="Confirm Password" required>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="signup-invite-code" placeholder="Invite Code (Optional)">
+            </div>
+            <button type="submit" class="btn btn-success">Register</button>
+            <p class="mt-3">
+                Back to Login? <a href="#" class="link" onclick="showLogin()">Login</a>
+            </p>
+        </form>
+    </div>
+
+    <!-- Password Reset Page -->
+    <div id="reset-container" class="reset-container hidden">
+        <h2>Reset Password</h2>
+        <form id="reset-form">
+            <div class="form-group">
+                <input type="email" class="form-control" id="reset-email" placeholder="Email" required>
+            </div>
+            <button type="submit" class="btn btn-success">Send Reset Link</button>
+            <p class="mt-3">
+                Back to Login? <a href="#" class="link" onclick="showLogin()">Login</a>
+            </p>
+        </form>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home-container" class="home-container hidden">
+        <div class="custom-ad">
+            <a href="" rel="nofollow"><img alt="banner" src="https://landings-cdn.adsterratech.com/referralBanners/png/728%20x%2090%20px.png" /></a>
+        </div>
         <h2>Welcome to ARPM Mining</h2>
         <div class="balance-info">
-            <p><strong>বর্তমান ব্যালেন্স:</strong> <span id="balance">0.0000</span> ARPM</p>
+            <p><strong>Current Balance:</strong> <span id="balance">0.0000</span> ARPM</p>
         </div>
         <div id="mining-area">
             <div class="mining-circle" id="mining-circle" onclick="startMining()">Start Mining</div>
@@ -236,45 +370,80 @@
         <div id="bottom-ad-container" class="bottom-ad-container"></div>
     </div>
 
-    <!-- প্রোফাইল পেজ -->
+    <!-- Profile Page -->
     <div id="profile-container" class="profile-container hidden">
-        <h2>প্রোফাইল</h2>
-        <div class="balance-info">
-            <p><strong>ইউজার নাম:</strong> <span id="profile-username"></span></p>
-            <p><strong>ইমেইল:</strong> <span id="profile-email"></span></p>
-            <p><strong>ইনভাইট কোড:</strong> <span id="profile-invite-code"></span></p>
+        <div class="custom-ad">
+            <a href="" rel="nofollow"><img alt="banner" src="https://landings-cdn.adsterratech.com/referralBanners/png/728%20x%2090%20px.png" /></a>
         </div>
-        <button class="btn btn-danger w-100 mt-3" onclick="signOutUser()">
-            <i class="fas fa-sign-out-alt me-2"></i>লগআউট
+        <h2>Profile</h2>
+        <div class="profile-info">
+            <p><strong>Username:</strong> <span id="profile-username">N/A</span></p>
+            <p><strong>Registration Date:</strong> <span id="profile-registration-date">N/A</span></p>
+            <p><strong>Balance:</strong> <span id="profile-balance">0.0000</span> ARPM</p>
+            <p><strong>Total Referrals:</strong> <span id="profile-referrals">0</span></p>
+            <p><strong>Invite Code:</strong> <span id="profile-unique-code">N/A</span></p>
+        </div>
+        <button class="logout-btn" onclick="signOutUser()">
+            <i class="fas fa-sign-out-alt"></i> Logout
         </button>
         <div id="profile-ad-container" class="profile-ad-container"></div>
     </div>
 
-    <div class="navbar-bottom">
+    <!-- Income Page -->
+    <div id="income-container" class="income-container hidden">
+        <div class="custom-ad">
+            <a href="" rel="nofollow"><img alt="banner" src="https://landings-cdn.adsterratech.com/referralBanners/png/728%20x%2090%20px.png" /></a>
+        </div>
+        <h2>Income</h2>
+        <div class="balance-info">
+            <p><strong>Total Earnings:</strong> <span id="total-earnings">0.0000</span> ARPM</p>
+            <p><strong>Tax Status:</strong> <span id="tax-status">Not Completed</span></p>
+            <label><input type="checkbox" id="tax-completed" onchange="updateTaxStatus()"> I have completed the tax form</label>
+        </div>
+        <div class="balance-info mt-3">
+            <p><strong>YouTube:</strong> <a href="https://www.youtube.com/@ARPMMining-l3x7o" target="_blank" class="social-link" onclick="checkSubscription(event)">Subscribe for 1.5x Bonus</a></p>
+            <p><strong>X:</strong> <a href="https://x.com/Arpmmining22?t=qiPsxRQxCobbTth17LcyfQ&s=09" target="_blank" class="social-link" onclick="checkFollow(event)">Follow for 1.5x Bonus</a></p>
+        </div>
+    </div>
+
+    <!-- Invite Page -->
+    <div id="invite-container" class="invite-container hidden">
+        <div class="custom-ad">
+            <a href="" rel="nofollow"><img alt="banner" src="https://landings-cdn.adsterratech.com/referralBanners/png/728%20x%2090%20px.png" /></a>
+        </div>
+        <h2>Invite</h2>
+        <div class="balance-info">
+            <p><strong>Your Invite Code:</strong> <span id="invite-code-display">Loading...</span>
+                <button class="copy-btn" onclick="copyInviteCode()">Copy Code</button>
+            </p>
+        </div>
+    </div>
+
+    <div class="navbar-bottom" id="navbar-bottom">
         <a href="#" onclick="navigateTo('home')" class="active">
-            <i class="fas fa-home"></i>হোম
+            <i class="fas fa-home"></i>Home
         </a>
         <a href="#" onclick="navigateTo('invite')">
-            <i class="fas fa-user-plus"></i>ইনভাইট
+            <i class="fas fa-user-plus"></i>Invite
         </a>
         <a href="#" onclick="navigateTo('wallet')">
-            <i class="fas fa-wallet"></i>ওয়ালেট
+            <i class="fas fa-wallet"></i>Wallet
         </a>
         <a href="#" onclick="navigateTo('income')">
-            <i class="fas fa-money-bill-wave"></i>আয়
+            <i class="fas fa-money-bill-wave"></i>Income
         </a>
         <a href="#" onclick="navigateTo('profile')">
-            <i class="fas fa-user"></i>প্রোফাইল
+            <i class="fas fa-user"></i>Profile
         </a>
     </div>
 
     <script type="module">
-        // Firebase SDK ইম্পোর্ট
+        // Firebase SDK Import
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-        import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+        import { getDatabase, ref, get, set, update, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
-        // Firebase কনফিগারেশন
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB7YhDmQa4MtSzutSwJGGU2F7XR9ubcoqQ",
             authDomain: "arpm-mining.firebaseapp.com",
@@ -286,25 +455,30 @@
             measurementId: "G-8YVW5EK6N1"
         };
 
-        // Firebase ইনিশিয়ালাইজ
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
-        auth.languageCode = 'bn';
+        auth.languageCode = 'en';
 
-        // ডম এলিমেন্ট
+        // DOM Elements
         const loginContainer = document.getElementById('login-container');
+        const signupContainer = document.getElementById('signup-container');
+        const resetContainer = document.getElementById('reset-container');
         const homeContainer = document.getElementById('home-container');
         const profileContainer = document.getElementById('profile-container');
+        const incomeContainer = document.getElementById('income-container');
+        const inviteContainer = document.getElementById('invite-container');
+        const navbarBottom = document.getElementById('navbar-bottom');
         const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const resetForm = document.getElementById('reset-form');
         const balanceElement = document.getElementById('balance');
-        const registerLink = document.getElementById('register-link');
-        const resetPasswordLink = document.getElementById('reset-password-link');
         const miningCircle = document.getElementById('mining-circle');
         const miningArea = document.getElementById('mining-area');
         const timerElement = document.getElementById('timer');
 
-        // অ্যাড কনফিগারেশন
+        // Ad Configuration
         const adConfigs = [
             { key: '9970296ce7f10d2bc088e12491052390', format: 'iframe', height: 250, width: 300, src: '//www.highperformanceformat.com/9970296ce7f10d2bc088e12491052390/invoke.js' },
             { key: '9bfeb6f22a14d69efdf3e562dfdce0a7', format: 'iframe', height: 90, width: 728, src: '//www.highperformanceformat.com/9bfeb6f22a14d69efdf3e562dfdce0a7/invoke.js' },
@@ -314,7 +488,7 @@
             { key: 'f8e69eb7049e83d849bfa3e2a96d5df0', format: 'div', containerId: 'container-f8e69eb7049e83d849bfa3e2a96d5df0', src: '//pl26589695.profitableratecpm.com/f8e69eb7049e83d849bfa3e2a96d5df0/invoke.js' }
         ];
 
-        // র‍্যান্ডম অ্যাড লোড
+        // Load Random Ad
         async function loadRandomAd(containerId) {
             const adContainer = document.getElementById(containerId);
             if (!adContainer) return false;
@@ -348,160 +522,239 @@
             return true;
         }
 
-        // লগইন ফর্ম সাবমিশন
+        // Page Toggle Functions
+        window.showLogin = function() {
+            loginContainer.style.display = 'block';
+            signupContainer.style.display = 'none';
+            resetContainer.style.display = 'none';
+            homeContainer.style.display = 'none';
+            profileContainer.style.display = 'none';
+            incomeContainer.style.display = 'none';
+            inviteContainer.style.display = 'none';
+            navbarBottom.style.display = 'none';
+        }
+
+        window.showSignup = function() {
+            loginContainer.style.display = 'none';
+            signupContainer.style.display = 'block';
+            resetContainer.style.display = 'none';
+            homeContainer.style.display = 'none';
+            profileContainer.style.display = 'none';
+            incomeContainer.style.display = 'none';
+            inviteContainer.style.display = 'none';
+            navbarBottom.style.display = 'none';
+        }
+
+        window.showReset = function() {
+            loginContainer.style.display = 'none';
+            signupContainer.style.display = 'none';
+            resetContainer.style.display = 'block';
+            homeContainer.style.display = 'none';
+            profileContainer.style.display = 'none';
+            incomeContainer.style.display = 'none';
+            inviteContainer.style.display = 'none';
+            navbarBottom.style.display = 'none';
+        }
+
+        // Login Form Submission
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                console.log('লগইন সফল');
+                alert('Login successful!');
                 loginContainer.style.display = 'none';
                 homeContainer.style.display = 'block';
+                navbarBottom.style.display = 'flex';
                 updateBalance();
                 loadMiningState();
             } catch (error) {
-                console.error('লগইন ত্রুটি:', error.message);
-                alert('লগইন ব্যর্থ: ' + error.message);
+                console.error('Login error:', error.message);
+                alert('Login failed: ' + error.message);
             }
         });
 
-        // রেজিস্ট্রেশন
-        registerLink.addEventListener('click', (e) => {
+        // Registration Form Submission
+        signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const username = prompt('ইউজার নাম দিন:');
-            const email = prompt('নতুন ইমেইল দিন:');
-            const password = prompt('নতুন পাসওয়ার্ড দিন:');
-            const confirmPassword = prompt('পাসওয়ার্ড নিশ্চিত করুন:');
-            const inviteCode = prompt('ইনভাইট কোড দিন:');
-            const agree = confirm('শর্তাবলীতে সম্মত কি?');
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            const inviteCode = document.getElementById('signup-invite-code').value;
 
-            if (!username || !email || !password || !confirmPassword || !inviteCode) {
-                alert('সব তথ্য পূরণ করুন!');
+            if (!username || !email || !password || !confirmPassword) {
+                alert('Please fill in all required fields!');
                 return;
             }
             if (password !== confirmPassword) {
-                alert('পাসওয়ার্ড মেলেনি!');
-                return;
-            }
-            if (!agree) {
-                alert('শর্তাবলীতে সম্মত হতে হবে!');
+                alert('Passwords do not match!');
                 return;
             }
 
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    set(ref(db, 'users/' + user.uid), {
-                        username: username,
-                        email: email,
-                        tokens: 0,
-                        inviteCode: inviteCode,
-                        miningStartTime: 0,
-                        miningEndTime: 0
-                    });
-                    console.log('রেজিস্ট্রেশন সফল:', user.uid);
-                    alert('রেজিস্ট্রেশন সফল!');
-                })
-                .catch((error) => {
-                    console.error('রেজিস্ট্রেশন ত্রুটি:', error.message);
-                    alert('রেজিস্ট্রেশন ব্যর্থ: ' + error.message);
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                const uniqueCode = generateUniqueCode();
+                const registrationDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                await set(ref(db, 'users/' + user.uid), {
+                    username: username,
+                    email: email,
+                    tokens: 0,
+                    earnings: 0,
+                    inviteCode: inviteCode || null,
+                    uniqueCode: uniqueCode,
+                    registrationDate: registrationDate,
+                    miningStartTime: 0,
+                    miningEndTime: 0,
+                    taxCompleted: false,
+                    referrals: 0
                 });
-        });
 
-        // পাসওয়ার্ড রিসেট
-        resetPasswordLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const email = prompt('আপনার ইমেইল দিন:');
-            if (email) {
-                sendPasswordResetEmail(auth, email)
-                    .then(() => {
-                        console.log('পাসওয়ার্ড রিসেট ইমেইল পাঠানো হয়েছে');
-                        alert('পাসওয়ার্ড রিসেট লিঙ্ক আপনার ইমেইলে পাঠানো হয়েছে!');
-                    })
-                    .catch((error) => {
-                        console.error('পাসওয়ার্ড রিসেট ত্রুটি:', error.message);
-                        alert('পাসওয়ার্ড রিসেট ব্যর্থ: ' + error.message);
-                    });
+                // Check if the inviteCode matches any existing user's uniqueCode
+                if (inviteCode) {
+                    const usersRef = ref(db, 'users');
+                    const inviteQuery = query(usersRef, orderByChild('uniqueCode'), equalTo(inviteCode));
+                    const snapshot = await get(inviteQuery);
+                    if (snapshot.exists()) {
+                        snapshot.forEach((childSnapshot) => {
+                            const referrerId = childSnapshot.key;
+                            const referrerData = childSnapshot.val();
+                            const newReferrals = (referrerData.referrals || 0) + 1;
+                            update(ref(db, 'users/' + referrerId), { referrals: newReferrals });
+                        });
+                    }
+                }
+
+                alert('Registration successful!');
+                showLogin();
+            } catch (error) {
+                console.error('Registration error:', error.message);
+                alert('Registration failed: ' + error.message);
             }
         });
 
-        // অথেনটিকেশন স্টেট চেক
+        // Password Reset Form Submission
+        resetForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('reset-email').value;
+
+            if (!email) {
+                alert('Please enter your email!');
+                return;
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert('Password reset link has been sent to your email!');
+                showLogin();
+            } catch (error) {
+                console.error('Password reset error:', error.message);
+                alert('Password reset failed: ' + error.message);
+            }
+        });
+
+        // Authentication State Check
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                console.log('ইউজার লগইন করা আছে:', user.uid);
+                console.log('User is logged in:', user.uid);
                 loginContainer.style.display = 'none';
+                signupContainer.style.display = 'none';
+                resetContainer.style.display = 'none';
                 homeContainer.style.display = 'block';
                 profileContainer.style.display = 'none';
+                incomeContainer.style.display = 'none';
+                inviteContainer.style.display = 'none';
+                navbarBottom.style.display = 'flex';
                 updateBalance();
                 loadMiningState();
                 loadProfileInfo();
                 loadRandomAd('bottom-ad-container');
                 loadProfileAds();
             } else {
-                console.log('ইউজার লগইন করা নেই');
+                console.log('User is not logged in');
                 loginContainer.style.display = 'block';
+                signupContainer.style.display = 'none';
+                resetContainer.style.display = 'none';
                 homeContainer.style.display = 'none';
                 profileContainer.style.display = 'none';
+                incomeContainer.style.display = 'none';
+                inviteContainer.style.display = 'none';
+                navbarBottom.style.display = 'none';
             }
         });
 
-        // ব্যালেন্স আপডেট
+        // Update Balance
         async function updateBalance() {
             if (auth.currentUser) {
                 const userId = auth.currentUser.uid;
                 const userRef = ref(db, 'users/' + userId);
-                const snapshot = await get(userRef);
-                const userData = snapshot.val() || {};
-                balanceElement.textContent = (userData.tokens || 0).toFixed(4);
+                try {
+                    const snapshot = await get(userRef);
+                    const userData = snapshot.val() || {};
+                    balanceElement.textContent = (userData.tokens || 0).toFixed(4);
+                    document.getElementById('total-earnings').textContent = (userData.earnings || 0).toFixed(4);
+                    document.getElementById('profile-balance').textContent = (userData.tokens || 0).toFixed(4);
+                } catch (error) {
+                    console.error('Balance update error:', error.message);
+                    alert('Error loading balance: ' + error.message);
+                }
             }
         }
 
-        // মাইনিং শুরু
+        // Start Mining
         window.startMining = async function() {
             if (!auth.currentUser) return;
             const userId = auth.currentUser.uid;
             const userRef = ref(db, 'users/' + userId);
-            const snapshot = await get(userRef);
-            const userData = snapshot.val() || {};
-            const currentTime = Date.now();
-            const miningEndTime = userData.miningEndTime || 0;
+            try {
+                const snapshot = await get(userRef);
+                const userData = snapshot.val() || {};
+                const currentTime = Date.now();
+                const miningEndTime = userData.miningEndTime || 0;
 
-            if (currentTime < miningEndTime) {
-                miningCircle.classList.add('disabled');
-                return;
-            }
-
-            const adLoaded = await loadRandomAd('ad-container');
-            if (adLoaded) {
-                setTimeout(async () => {
-                    const miningDuration = 6 * 60 * 60 * 1000; // ৬ ঘণ্টা
-                    const startTime = Date.now();
-                    const endTime = startTime + miningDuration;
-                    await update(userRef, {
-                        miningStartTime: startTime,
-                        miningEndTime: endTime,
-                        tokens: userData.tokens || 0
-                    });
-                    miningCircle.style.display = 'none';
-                    const timerDiv = document.createElement('div');
-                    timerDiv.className = 'timer';
-                    timerDiv.id = 'timer';
-                    miningArea.innerHTML = '';
-                    miningArea.appendChild(timerDiv);
-                    startTimer(endTime);
+                if (currentTime < miningEndTime) {
                     miningCircle.classList.add('disabled');
-                }, 1000);
+                    return;
+                }
+
+                const adLoaded = await loadRandomAd('ad-container');
+                if (adLoaded) {
+                    setTimeout(async () => {
+                        const miningDuration = 6 * 60 * 60 * 1000; // 6 hours
+                        const startTime = Date.now();
+                        const endTime = startTime + miningDuration;
+                        await update(userRef, {
+                            miningStartTime: startTime,
+                            miningEndTime: endTime,
+                            tokens: userData.tokens || 0
+                        });
+                        miningCircle.style.display = 'none';
+                        const timerDiv = document.createElement('div');
+                        timerDiv.className = 'timer';
+                        timerDiv.id = 'timer';
+                        miningArea.innerHTML = '';
+                        miningArea.appendChild(timerDiv);
+                        startTimer(endTime);
+                        miningCircle.classList.add('disabled');
+                    }, 1000);
+                } else {
+                    alert('Failed to load ad. Please try again.');
+                }
+            } catch (error) {
+                console.error('Mining error:', error.message);
+                alert('Error starting mining: ' + error.message);
             }
         };
 
-        // টাইমার এবং টোকেন বৃদ্ধি
+        // Timer and Token Increment
         function startTimer(endTime) {
-            const totalDuration = 6 * 60 * 60 * 1000; // ৬ ঘণ্টা মিলিসেকেন্ডে
-            const totalSeconds = totalDuration / 1000; // মোট সেকেন্ড
-            const totalTokens = 2; // ৬ ঘণ্টায় ২ টোকেন
-            const tokenPerSecond = totalTokens / totalSeconds; // প্রতি সেকেন্ডে টোকেন বৃদ্ধি
+            const totalDuration = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+            const totalSeconds = totalDuration / 1000; // Total seconds
+            const totalTokens = 2; // 2 tokens for 6 hours
+            const tokenPerSecond = totalTokens / totalSeconds; // Tokens per second
 
             const timerDiv = document.getElementById('timer');
             const interval = setInterval(async () => {
@@ -514,10 +767,21 @@
                     miningCircle.classList.remove('disabled');
                     const userId = auth.currentUser.uid;
                     const userRef = ref(db, 'users/' + userId);
-                    const snapshot = await get(userRef);
-                    const userData = snapshot.val() || {};
-                    await update(userRef, { tokens: (userData.tokens || 0) + totalTokens });
-                    updateBalance();
+                    try {
+                        const snapshot = await get(userRef);
+                        const userData = snapshot.val() || {};
+                        let earnedTokens = totalTokens;
+                        if (userData.taxCompleted) {
+                            earnedTokens *= 1.5; // 1.5x bonus if tax completed
+                        }
+                        const newTokens = (userData.tokens || 0) + earnedTokens;
+                        const newEarnings = (userData.earnings || 0) + earnedTokens;
+                        await update(userRef, { tokens: newTokens, earnings: newEarnings });
+                        updateBalance();
+                    } catch (error) {
+                        console.error('Timer end error:', error.message);
+                        alert('Error updating tokens: ' + error.message);
+                    }
                     return;
                 }
                 const hours = Math.floor(timeLeft / (1000 * 60 * 60));
@@ -525,56 +789,73 @@
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
                 timerDiv.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-                // প্রতি সেকেন্ডে টোকেন বৃদ্ধি
+                // Increment tokens per second
                 const userId = auth.currentUser.uid;
                 const userRef = ref(db, 'users/' + userId);
-                const snapshot = await get(userRef);
-                const userData = snapshot.val() || {};
-                const elapsedTime = totalDuration - timeLeft;
-                const tokensEarned = (elapsedTime / 1000) * tokenPerSecond;
-                await update(userRef, { tokens: (userData.tokens || 0) + tokenPerSecond });
-                updateBalance();
+                try {
+                    const snapshot = await get(userRef);
+                    const userData = snapshot.val() || {};
+                    const newTokens = (userData.tokens || 0) + tokenPerSecond;
+                    const newEarnings = (userData.earnings || 0) + tokenPerSecond;
+                    await update(userRef, { tokens: newTokens, earnings: newEarnings });
+                    updateBalance();
+                } catch (error) {
+                    console.error('Token update error:', error.message);
+                    alert('Error updating tokens: ' + error.message);
+                }
             }, 1000);
         }
 
-        // মাইনিং স্টেট লোড
+        // Load Mining State
         async function loadMiningState() {
             if (!auth.currentUser) return;
             const userId = auth.currentUser.uid;
             const userRef = ref(db, 'users/' + userId);
-            const snapshot = await get(userRef);
-            const userData = snapshot.val() || {};
-            const currentTime = Date.now();
-            const miningEndTime = userData.miningEndTime || 0;
+            try {
+                const snapshot = await get(userRef);
+                const userData = snapshot.val() || {};
+                const currentTime = Date.now();
+                const miningEndTime = userData.miningEndTime || 0;
 
-            if (currentTime < miningEndTime) {
-                miningCircle.style.display = 'none';
-                const timerDiv = document.createElement('div');
-                timerDiv.className = 'timer';
-                timerDiv.id = 'timer';
-                miningArea.innerHTML = '';
-                miningArea.appendChild(timerDiv);
-                startTimer(miningEndTime);
-                miningCircle.classList.add('disabled');
-            } else {
-                miningCircle.style.display = 'block';
-                miningCircle.classList.remove('disabled');
+                if (currentTime < miningEndTime) {
+                    miningCircle.style.display = 'none';
+                    const timerDiv = document.createElement('div');
+                    timerDiv.className = 'timer';
+                    timerDiv.id = 'timer';
+                    miningArea.innerHTML = '';
+                    miningArea.appendChild(timerDiv);
+                    startTimer(miningEndTime);
+                    miningCircle.classList.add('disabled');
+                } else {
+                    miningCircle.style.display = 'block';
+                    miningCircle.classList.remove('disabled');
+                }
+            } catch (error) {
+                console.error('Mining state load error:', error.message);
+                alert('Error loading mining state: ' + error.message);
             }
         }
 
-        // প্রোফাইল তথ্য লোড
+        // Load Profile Info
         async function loadProfileInfo() {
             if (!auth.currentUser) return;
             const userId = auth.currentUser.uid;
             const userRef = ref(db, 'users/' + userId);
-            const snapshot = await get(userRef);
-            const userData = snapshot.val() || {};
-            document.getElementById('profile-username').textContent = userData.username || 'N/A';
-            document.getElementById('profile-email').textContent = userData.email || 'N/A';
-            document.getElementById('profile-invite-code').textContent = userData.inviteCode || 'N/A';
+            try {
+                const snapshot = await get(userRef);
+                const userData = snapshot.val() || {};
+                document.getElementById('profile-username').textContent = userData.username || 'N/A';
+                document.getElementById('profile-registration-date').textContent = userData.registrationDate || 'N/A';
+                document.getElementById('profile-balance').textContent = (userData.tokens || 0).toFixed(4);
+                document.getElementById('profile-referrals').textContent = userData.referrals || 0;
+                document.getElementById('profile-unique-code').textContent = userData.uniqueCode || 'N/A';
+            } catch (error) {
+                console.error('Profile info load error:', error.message);
+                alert('Error loading profile info: ' + error.message);
+            }
         }
 
-        // প্রোফাইল অ্যাড লোড
+        // Load Profile Ads
         async function loadProfileAds() {
             const profileAdContainer = document.getElementById('profile-ad-container');
             if (!profileAdContainer) return;
@@ -583,24 +864,130 @@
                 const adLoaded = await loadRandomAd('profile-ad-container');
                 if (adLoaded) {
                     setTimeout(() => {
-                        profileAdContainer.innerHTML = ''; // পূর্বের অ্যাড সরানো
-                        showNextAd(); // পরের অ্যাড দেখানো
-                    }, 10000); // ১০ সেকেন্ড পরে পরবর্তী অ্যাড
+                        profileAdContainer.innerHTML = '';
+                        showNextAd();
+                    }, 10000);
                 }
             }
             showNextAd();
         }
 
-        // নেভিগেশন হ্যান্ডলার
+        // Update Tax Status
+        window.updateTaxStatus = async function() {
+            if (!auth.currentUser) return;
+            const userId = auth.currentUser.uid;
+            const userRef = ref(db, 'users/' + userId);
+            const taxCompleted = document.getElementById('tax-completed').checked;
+
+            try {
+                await update(userRef, { taxCompleted });
+                document.getElementById('tax-status').textContent = taxCompleted ? 'Completed' : 'Not Completed';
+                alert('Tax status updated!');
+            } catch (error) {
+                console.error('Tax status update error:', error.message);
+                alert('Error updating tax status: ' + error.message);
+            }
+        };
+
+        // Check Subscription and Follow
+        window.checkSubscription = async function(event) {
+            event.preventDefault();
+            if (confirm('Have you subscribed to our YouTube channel?')) {
+                const userId = auth.currentUser.uid;
+                const userRef = ref(db, 'users/' + userId);
+                try {
+                    const snapshot = await get(userRef);
+                    const userData = snapshot.val() || {};
+                    const bonusTokens = (userData.tokens || 0) * 0.5; // 1.5x = 50% extra
+                    const newTokens = (userData.tokens || 0) + bonusTokens;
+                    const newEarnings = (userData.earnings || 0) + bonusTokens;
+                    await update(userRef, { tokens: newTokens, earnings: newEarnings });
+                    updateBalance();
+                    alert(`Bonus applied! You earned ${bonusTokens.toFixed(4)} ARPM.`);
+                    window.open('https://www.youtube.com/@ARPMMining-l3x7o', '_blank');
+                } catch (error) {
+                    console.error('Subscription bonus error:', error.message);
+                    alert('Error applying subscription bonus: ' + error.message);
+                }
+            } else {
+                window.open('https://www.youtube.com/@ARPMMining-l3x7o', '_blank');
+            }
+        };
+
+        window.checkFollow = async function(event) {
+            event.preventDefault();
+            if (confirm('Have you followed us on X?')) {
+                const userId = auth.currentUser.uid;
+                const userRef = ref(db, 'users/' + userId);
+                try {
+                    const snapshot = await get(userRef);
+                    const userData = snapshot.val() || {};
+                    const bonusTokens = (userData.tokens || 0) * 0.5; // 1.5x = 50% extra
+                    const newTokens = (userData.tokens || 0) + bonusTokens;
+                    const newEarnings = (userData.earnings || 0) + bonusTokens;
+                    await update(userRef, { tokens: newTokens, earnings: newEarnings });
+                    updateBalance();
+                    alert(`Bonus applied! You earned ${bonusTokens.toFixed(4)} ARPM.`);
+                    window.open('https://x.com/Arpmmining22?t=qiPsxRQxCobbTth17LcyfQ&s=09', '_blank');
+                } catch (error) {
+                    console.error('Follow bonus error:', error.message);
+                    alert('Error applying follow bonus: ' + error.message);
+                }
+            } else {
+                window.open('https://x.com/Arpmmining22?t=qiPsxRQxCobbTth17LcyfQ&s=09', '_blank');
+            }
+        };
+
+        // Generate 8-digit Unique Code
+        function generateUniqueCode() {
+            return Math.floor(10000000 + Math.random() * 90000000).toString();
+        }
+
+        // Load Invite Code
+        async function loadInviteCode() {
+            if (!auth.currentUser) return;
+            const userId = auth.currentUser.uid;
+            const userRef = ref(db, 'users/' + userId);
+            try {
+                const snapshot = await get(userRef);
+                const userData = snapshot.val() || {};
+                let uniqueCode = userData.uniqueCode;
+                if (!uniqueCode) {
+                    uniqueCode = generateUniqueCode();
+                    await update(userRef, { uniqueCode: uniqueCode });
+                }
+                document.getElementById('invite-code-display').textContent = uniqueCode;
+            } catch (error) {
+                console.error('Invite code load error:', error.message);
+                alert('Error loading invite code: ' + error.message);
+            }
+        }
+
+        // Copy Invite Code
+        window.copyInviteCode = function() {
+            const inviteCode = document.getElementById('invite-code-display').textContent;
+            navigator.clipboard.writeText(inviteCode).then(() => {
+                alert('Invite code copied to clipboard!');
+            }).catch((error) => {
+                console.error('Copy error:', error);
+                alert('Failed to copy invite code: ' + error.message);
+            });
+        };
+
+        // Navigation Handler
         window.navigateTo = function(section) {
-            console.log('নেভিগেশন ক্লিক:', section);
+            console.log('Navigation clicked:', section);
             const navLinks = document.querySelectorAll('.navbar-bottom a');
             navLinks.forEach(link => link.classList.remove('active'));
             document.querySelector(`.navbar-bottom a[onclick="navigateTo('${section}')"]`).classList.add('active');
 
             loginContainer.style.display = 'none';
+            signupContainer.style.display = 'none';
+            resetContainer.style.display = 'none';
             homeContainer.style.display = 'none';
             profileContainer.style.display = 'none';
+            incomeContainer.style.display = 'none';
+            inviteContainer.style.display = 'none';
 
             switch (section) {
                 case 'home':
@@ -608,7 +995,6 @@
                     loadRandomAd('bottom-ad-container');
                     break;
                 case 'wallet':
-                case 'income':
                     loadRandomAd('ad-container').then(() => {
                         setTimeout(() => {
                             alert('Coming soon');
@@ -616,43 +1002,39 @@
                     });
                     homeContainer.style.display = 'block';
                     break;
+                case 'income':
+                    incomeContainer.style.display = 'block';
+                    break;
                 case 'invite':
-                    if (auth.currentUser) {
-                        const userId = auth.currentUser.uid;
-                        const userRef = ref(db, 'users/' + userId);
-                        get(userRef).then((snapshot) => {
-                            const userData = snapshot.val() || {};
-                            const inviteCode = userData.inviteCode || generateInviteCode();
-                            alert(`আপনার ইনভাইট কোড: ${inviteCode}`);
-                        });
-                    }
-                    homeContainer.style.display = 'block';
+                    inviteContainer.style.display = 'block';
+                    loadInviteCode();
                     break;
                 case 'profile':
                     profileContainer.style.display = 'block';
+                    loadProfileInfo();
                     break;
                 default:
-                    console.error('অজানা নেভিগেশন:', section);
-                    alert('অজানা অপশন!');
+                    console.error('Unknown navigation:', section);
+                    alert('Unknown option!');
             }
         };
 
-        // ইনভাইট কোড জেনারেট
-        function generateInviteCode() {
-            return 'INVITE-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-        }
-
-        // লগআউট
+        // Logout
         window.signOutUser = async function() {
             try {
                 await signOut(auth);
-                console.log('লগআউট সফল');
+                alert('Logout successful!');
                 loginContainer.style.display = 'block';
+                signupContainer.style.display = 'none';
+                resetContainer.style.display = 'none';
                 homeContainer.style.display = 'none';
                 profileContainer.style.display = 'none';
+                incomeContainer.style.display = 'none';
+                inviteContainer.style.display = 'none';
+                navbarBottom.style.display = 'none';
             } catch (error) {
-                console.error('লগআউট ত্রুটি:', error.message);
-                alert('লগআউট ব্যর্থ: ' + error.message);
+                console.error('Logout error:', error.message);
+                alert('Logout failed: ' + error.message);
             }
         };
     </script>
